@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { 
   Mail, 
   Phone, 
@@ -15,11 +16,15 @@ import {
 import { personalInfo, servicesData } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 
-export default function Contact({ initialSelectedService }) {
+export default function Contact({ initialSelectedService, isFullPage = false }) {
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const queryService = searchParams.get('service') || location.state?.service || initialSelectedService;
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    service: initialSelectedService || 'Website Development',
+    service: queryService || 'Website Development',
     budget: 'Flexible / To Be Discussed',
     timeline: 'Standard (2-4 Weeks)',
     message: '',
@@ -28,12 +33,11 @@ export default function Contact({ initialSelectedService }) {
   const [copiedField, setCopiedField] = useState(null);
   const [submissionFeedback, setSubmissionFeedback] = useState(null);
 
-  // Update selected service if parent changes it
   useEffect(() => {
-    if (initialSelectedService) {
-      setFormData((prev) => ({ ...prev, service: initialSelectedService }));
+    if (queryService) {
+      setFormData((prev) => ({ ...prev, service: queryService }));
     }
-  }, [initialSelectedService]);
+  }, [queryService]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,14 +94,15 @@ export default function Contact({ initialSelectedService }) {
 
     setSubmissionFeedback({
       type: 'info',
-      message: 'Launching your email client with your pre-formatted project message. You can also chat directly on WhatsApp using the button below.',
+      message: 'Opening your default email client with your pre-formatted project details. You can also chat directly on WhatsApp using the button below.',
     });
   };
 
   return (
-    <section id="contact" className="py-24 bg-[#0B1120] relative">
+    <section className={`bg-[#0B1120] relative ${isFullPage ? 'pt-32 pb-24 md:pt-40 md:pb-28' : 'py-20'}`}>
       {/* Background accents */}
       <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-600/10 blur-[130px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute bottom-10 left-10 w-80 h-80 bg-cyan-600/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -106,9 +111,9 @@ export default function Contact({ initialSelectedService }) {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/30 border border-blue-700/40 text-blue-400 text-xs font-semibold tracking-wider uppercase">
             <span>Direct Inquiries</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Have a Project in Mind?
-          </h2>
+          </h1>
           <p className="text-base sm:text-lg text-slate-300">
             Let's discuss your idea and explore how I can help bring it to life.
           </p>
@@ -121,9 +126,9 @@ export default function Contact({ initialSelectedService }) {
             
             <div className="bg-[#0F172A] border border-slate-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xl">
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">
+                <h2 className="text-xl font-bold text-white mb-2">
                   Contact Information
-                </h3>
+                </h2>
                 <p className="text-sm text-slate-300">
                   Feel free to reach out directly via WhatsApp, email, or explore my code on GitHub.
                 </p>
@@ -149,7 +154,7 @@ export default function Contact({ initialSelectedService }) {
                   </div>
                   <button
                     onClick={() => handleCopy(personalInfo.email, 'email')}
-                    className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0 ml-2"
+                    className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0 ml-2 cursor-pointer"
                     title="Copy Email"
                   >
                     {copiedField === 'email' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -176,7 +181,7 @@ export default function Contact({ initialSelectedService }) {
                   </div>
                   <button
                     onClick={() => handleCopy(personalInfo.phone, 'phone')}
-                    className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0 ml-2"
+                    className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0 ml-2 cursor-pointer"
                     title="Copy Phone Number"
                   >
                     {copiedField === 'phone' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -263,9 +268,9 @@ export default function Contact({ initialSelectedService }) {
               
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div>
-                  <h3 className="text-xl font-bold text-white">
+                  <h2 className="text-xl font-bold text-white">
                     Project Inquiry & Consultation
-                  </h3>
+                  </h2>
                   <p className="text-xs sm:text-sm text-slate-400 mt-1">
                     Fill in your project scope below to launch a consultation message.
                   </p>
@@ -384,7 +389,7 @@ export default function Contact({ initialSelectedService }) {
                 <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
                   <button
                     type="submit"
-                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-md shadow-blue-600/30 transition-all"
+                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-md shadow-blue-600/30 transition-all cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
                     <span>Send Inquiry via Email (mailto:)</span>
@@ -408,7 +413,7 @@ export default function Contact({ initialSelectedService }) {
                     <span>Submission Notice:</span>
                   </div>
                   <p>
-                    Clicking <strong>Send Inquiry</strong> opens your system's default email client pre-populated with these exact specifications. To connect an automated backend service (such as Formspree or Web3Forms), replace the submission handler in <code className="text-slate-300">src/components/Contact.jsx</code>.
+                    Clicking <strong>Send Inquiry</strong> launches your default email client with your project requirements formatted in the email body. You can also chat directly via WhatsApp. To connect a serverless form provider (such as Formspree or Web3Forms), replace the handler in <code className="text-slate-300">src/components/Contact.jsx</code>.
                   </p>
                 </div>
 

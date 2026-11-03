@@ -218,3 +218,4 @@ export default function ProjectMockup({ type, title }) {
       );
   }
 }
+

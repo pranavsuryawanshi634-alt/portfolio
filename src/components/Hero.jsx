@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { ArrowRight, Code, Sparkles, CheckCircle2, MessageSquare, Terminal, Copy, Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Code, Sparkles, CheckCircle2, Terminal, Copy, Check } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
-export default function Hero({ onDiscussProject }) {
+export default function Hero() {
   const [copied, setCopied] = useState(false);
 
   const handleCopyEmail = () => {
@@ -12,7 +13,7 @@ export default function Hero({ onDiscussProject }) {
   };
 
   return (
-    <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
       {/* Background radial glow accents */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-blue-600/15 blur-[130px] rounded-full pointer-events-none -z-10" />
       <div className="absolute top-1/3 -right-20 w-[400px] h-[350px] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
@@ -75,31 +76,20 @@ export default function Hero({ onDiscussProject }) {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-              <a
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (onDiscussProject) onDiscussProject();
-                  const target = document.querySelector('#contact');
-                  if (target) target.scrollIntoView({ behavior: 'smooth' });
-                }}
+              <Link
+                to="/contact"
                 className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-base shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
                 <span>Discuss Your Project</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
 
-              <a
-                href="#portfolio"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const target = document.querySelector('#portfolio');
-                  if (target) target.scrollIntoView({ behavior: 'smooth' });
-                }}
+              <Link
+                to="/portfolio"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-slate-700/80 bg-[#131E36]/50 hover:bg-[#131E36] hover:border-slate-600 text-slate-200 hover:text-white font-medium text-base transition-all duration-200"
               >
                 <span>Explore My Work</span>
-              </a>
+              </Link>
             </div>
 
             {/* Contact quick actions strip */}
@@ -107,7 +97,7 @@ export default function Hero({ onDiscussProject }) {
               <span className="font-medium text-slate-300">Direct contact:</span>
               <button
                 onClick={handleCopyEmail}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors border border-slate-700/60"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors border border-slate-700/60 cursor-pointer"
                 title="Click to copy email address"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}

@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { X, ExternalLink, CheckCircle2, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, ExternalLink, CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react';
 import ProjectMockup from './ProjectMockup';
 import { GithubIcon } from './SocialIcons';
 
-export default function ProjectModal({ project, onClose, onDiscussProject }) {
+export default function ProjectModal({ project, onClose }) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -17,6 +20,11 @@ export default function ProjectModal({ project, onClose, onDiscussProject }) {
   }, [onClose]);
 
   if (!project) return null;
+
+  const handleBuildSimilar = () => {
+    onClose();
+    navigate(`/contact?service=${encodeURIComponent('Inquiry regarding ' + project.title)}`);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
@@ -43,7 +51,7 @@ export default function ProjectModal({ project, onClose, onDiscussProject }) {
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
             aria-label="Close project modal"
           >
             <X className="w-5 h-5" />
@@ -150,15 +158,8 @@ export default function ProjectModal({ project, onClose, onDiscussProject }) {
           </div>
 
           <button
-            onClick={() => {
-              onClose();
-              if (onDiscussProject) {
-                onDiscussProject(`Inquiry regarding ${project.title}`);
-              }
-              const target = document.querySelector('#contact');
-              if (target) target.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-600/30 transition-all w-full sm:w-auto"
+            onClick={handleBuildSimilar}
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-600/30 transition-all w-full sm:w-auto cursor-pointer"
           >
             <span>Build Something Similar</span>
             <ArrowRight className="w-3.5 h-3.5" />

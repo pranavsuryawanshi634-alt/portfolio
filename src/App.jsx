@@ -1,78 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Services from './components/Services';
-import Portfolio from './components/Portfolio';
-import WhyWorkWithMe from './components/WhyWorkWithMe';
-import Process from './components/Process';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
+import FloatingScrollTop from './components/FloatingScrollTop';
+
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import ServicesPage from './pages/ServicesPage';
+import PortfolioPage from './pages/PortfolioPage';
+import WhyWorkWithMePage from './pages/WhyWorkWithMePage';
+import ProcessPage from './pages/ProcessPage';
+import ContactPage from './pages/ContactPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [selectedService, setSelectedService] = useState('Website Development');
-
-  useEffect(() => {
-    const sections = ['home', 'about', 'services', 'portfolio', 'why-me', 'process', 'contact'];
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const sectionId = sections[i];
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const top = element.offsetTop;
-          if (scrollPosition >= top) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleSelectService = (serviceTitle) => {
-    setSelectedService(serviceTitle);
-  };
-
-  const handleDiscussProject = (inquiryContext) => {
-    if (inquiryContext) {
-      setSelectedService(inquiryContext);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-[#070B14] text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased overflow-x-hidden">
-      {/* Navigation */}
-      <Navbar
-        activeSection={activeSection}
-        onSelectService={handleSelectService}
-      />
+    <div className="min-h-screen bg-[#070B14] text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased overflow-x-hidden flex flex-col justify-between">
+      {/* Reset scroll position on route transitions */}
+      <ScrollToTop />
 
-      {/* Main Sections */}
-      <main>
-        <Hero onDiscussProject={() => handleDiscussProject('General Web Project Inquiry')} />
-        
-        <About />
-        
-        <Services onSelectService={handleSelectService} />
-        
-        <Portfolio onDiscussProject={handleDiscussProject} />
-        
-        <WhyWorkWithMe />
-        
-        <Process onStartProject={handleDiscussProject} />
-        
-        <Contact initialSelectedService={selectedService} />
+      {/* Global Persistent Navigation Bar */}
+      <Navbar />
+
+      {/* Page Routing */}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/portfolio" element={<PortfolioPage />} />
+          <Route path="/why-work-with-me" element={<WhyWorkWithMePage />} />
+          <Route path="/process" element={<ProcessPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </main>
 
-      {/* Footer */}
+      {/* Global Persistent Footer */}
       <Footer />
+
+      {/* Floating Back to Top Button on Long Pages */}
+      <FloatingScrollTop />
     </div>
   );
 }

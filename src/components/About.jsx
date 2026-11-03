@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   GraduationCap, 
   MapPin, 
-  Award, 
   Briefcase, 
   Code2, 
-  Layers, 
-  Terminal, 
   ExternalLink,
   CheckCircle,
-  Sparkles
+  Sparkles,
+  ArrowRight
 } from 'lucide-react';
 import { personalInfo, skillsData } from '../data/portfolioData';
 import DynamicIcon from './DynamicIcon';
 
-export default function About() {
+export default function About({ isFullPage = false }) {
   const [activeCategory, setActiveCategory] = useState('all');
 
   const categories = [
@@ -41,7 +40,7 @@ export default function About() {
   };
 
   return (
-    <section id="about" className="py-24 bg-[#080D1A] relative border-t border-slate-800/80">
+    <section className={`bg-[#080D1A] relative border-t border-slate-800/80 ${isFullPage ? 'pt-32 pb-24 md:pt-40 md:pb-28' : 'py-20'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -49,9 +48,9 @@ export default function About() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/30 border border-blue-700/40 text-blue-400 text-xs font-semibold tracking-wider uppercase">
             <span>About Me</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Building Useful Digital Solutions with Clean Code
-          </h2>
+          </h1>
           <p className="text-base sm:text-lg text-slate-300">
             Learn more about my background, technical expertise, and what drives my approach to web development.
           </p>
@@ -62,12 +61,12 @@ export default function About() {
           
           {/* Left: Bio card */}
           <div className="lg:col-span-7 bg-[#0E1628] border border-slate-800/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl">
-            <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
+            <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
               <span>Who I Am</span>
               <span className="text-xs font-mono font-normal text-blue-400 bg-blue-950/70 px-2.5 py-0.5 rounded-full border border-blue-800/40">
                 Web Developer
               </span>
-            </h3>
+            </h2>
 
             <p className="text-slate-300 leading-relaxed text-base">
               {personalInfo.bio}
@@ -99,7 +98,7 @@ export default function About() {
             {/* Genuine Campus Involvement / Activities */}
             <div className="space-y-3 pt-2">
               <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                Leadership & Hackathons
+                Leadership & Verified Hackathons
               </div>
               <div className="space-y-2">
                 {personalInfo.roles.map((role, idx) => (
@@ -120,7 +119,7 @@ export default function About() {
                   <GraduationCap className="w-6 h-6" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-white">Academic Background</h4>
+                  <h3 className="text-lg font-bold text-white">Academic Background</h3>
                   <p className="text-xs text-slate-400">Engineering Foundation</p>
                 </div>
               </div>
@@ -132,9 +131,9 @@ export default function About() {
                     {personalInfo.education.currentStatus}
                   </span>
                 </div>
-                <h5 className="font-semibold text-white text-base">
+                <h4 className="font-semibold text-white text-base">
                   {personalInfo.education.degree}
-                </h5>
+                </h4>
                 <p className="text-sm text-slate-300">
                   {personalInfo.education.institution}
                 </p>
@@ -154,13 +153,13 @@ export default function About() {
               </div>
 
               {/* Action */}
-              <a
-                href="#contact"
+              <Link
+                to="/contact"
                 className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-400 font-medium text-sm transition-all"
               >
                 <span>Let's Discuss Your Project</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
 
@@ -170,10 +169,10 @@ export default function About() {
         <div className="bg-[#0D1527] border border-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
             <div>
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 <Code2 className="w-5 h-5 text-blue-400" />
                 <span>Technical Skills & Tools</span>
-              </h3>
+              </h2>
               <p className="text-xs sm:text-sm text-slate-400 mt-1">
                 Technologies and tools I use to design, develop, and deploy solutions.
               </p>
@@ -185,7 +184,7 @@ export default function About() {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                     activeCategory === cat.id
                       ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
                       : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
@@ -215,9 +214,9 @@ export default function About() {
                   )}
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-white group-hover:text-blue-300 transition-colors">
+                  <h3 className="text-xs sm:text-sm font-semibold text-white group-hover:text-blue-300 transition-colors">
                     {skill.name}
-                  </h4>
+                  </h3>
                   <span className="text-[11px] text-slate-400">
                     {skill.level}
                   </span>
@@ -226,10 +225,13 @@ export default function About() {
             ))}
           </div>
 
-          {/* Quick note on customizing skills */}
+          {/* Quick note */}
           <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-800/60">
-            <span>Configured via easy-to-edit portfolio configuration</span>
-            <span className="font-mono text-[11px] text-blue-400/80">src/data/portfolioData.js</span>
+            <span>Verified practical experience across projects and open-source contributions.</span>
+            <Link to="/portfolio" className="text-blue-400 hover:text-blue-300 flex items-center gap-1 font-medium">
+              <span>View In Projects</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
 

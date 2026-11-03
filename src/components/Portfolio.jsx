@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { ExternalLink, ArrowUpRight, Filter, Info, Sparkles } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ExternalLink, ArrowUpRight, ArrowRight, Info, Sparkles } from 'lucide-react';
 import { projectsData } from '../data/portfolioData';
 import ProjectMockup from './ProjectMockup';
 import ProjectModal from './ProjectModal';
 import { GithubIcon } from './SocialIcons';
 
-export default function Portfolio({ onDiscussProject }) {
+export default function Portfolio({ isFullPage = false, limit }) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeModalProject, setActiveModalProject] = useState(null);
+  const navigate = useNavigate();
 
   const categories = ['All', 'Web Development', 'Custom Web Application', 'Web Utility', 'Demonstrations'];
 
@@ -17,8 +19,14 @@ export default function Portfolio({ onDiscussProject }) {
     return project.category === selectedCategory;
   });
 
+  const displayedProjects = limit ? filteredProjects.slice(0, limit) : filteredProjects;
+
+  const handleInquireProject = (project) => {
+    navigate(`/contact?service=${encodeURIComponent('Inquiry regarding ' + project.title)}`);
+  };
+
   return (
-    <section id="portfolio" className="py-24 bg-[#080D1A] relative border-t border-slate-800/80">
+    <section className={`bg-[#080D1A] relative border-t border-slate-800/80 ${isFullPage ? 'pt-32 pb-24 md:pt-40 md:pb-28' : 'py-20'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -26,34 +34,36 @@ export default function Portfolio({ onDiscussProject }) {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/30 border border-blue-700/40 text-blue-400 text-xs font-semibold tracking-wider uppercase">
             <span>Portfolio & Case Studies</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Featured Projects & Development Work
-          </h2>
+          </h1>
           <p className="text-base sm:text-lg text-slate-300">
             A curated showcase of real-world websites, interactive utility tools, and hackathon prototypes built with modern web technologies.
           </p>
         </div>
 
-        {/* Filter Categories */}
-        <div className="flex items-center justify-center gap-2 flex-wrap mb-12">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 ${
-                selectedCategory === category
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-105'
-                  : 'bg-[#0E1628] text-slate-400 hover:text-white hover:bg-[#131E38] border border-slate-800'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
+        {/* Filter Categories (shown when not limited to a short preview) */}
+        {!limit && (
+          <div className="flex items-center justify-center gap-2 flex-wrap mb-12">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  selectedCategory === category
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-105'
+                    : 'bg-[#0E1628] text-slate-400 hover:text-white hover:bg-[#131E38] border border-slate-800'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {filteredProjects.map((project) => (
+          {displayedProjects.map((project) => (
             <div
               key={project.id}
               className="group bg-[#0E1628] border border-slate-800 hover:border-blue-500/50 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:shadow-blue-900/15"
@@ -133,7 +143,7 @@ export default function Portfolio({ onDiscussProject }) {
               <div className="px-5 sm:px-6 py-4 bg-[#0A1020] border-t border-slate-800/80 flex items-center justify-between gap-2">
                 <button
                   onClick={() => setActiveModalProject(project)}
-                  className="text-xs text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1 transition-colors"
+                  className="text-xs text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Info className="w-3.5 h-3.5" />
                   <span>Case Details</span>
@@ -166,12 +176,8 @@ export default function Portfolio({ onDiscussProject }) {
                     </a>
                   ) : (
                     <button
-                      onClick={() => {
-                        if (onDiscussProject) onDiscussProject('Booking inquiry for custom project');
-                        const target = document.querySelector('#contact');
-                        if (target) target.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold transition-all"
+                      onClick={() => handleInquireProject(project)}
+                      className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold transition-all cursor-pointer"
                     >
                       Inquire
                     </button>
@@ -182,28 +188,39 @@ export default function Portfolio({ onDiscussProject }) {
           ))}
         </div>
 
-        {/* Project Customization Guidance Callout */}
-        <div className="mt-14 bg-[#0E1628] border border-slate-800 p-5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-600/15 text-blue-400 shrink-0">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-sm font-semibold text-white">Need a custom website or application developed?</h4>
-              <p className="text-xs text-slate-400">All projects are configured with clean code and production-ready deployments.</p>
-            </div>
+        {/* Home page button to view all projects */}
+        {limit && (
+          <div className="mt-12 text-center">
+            <Link
+              to="/portfolio"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-400 hover:text-blue-300 text-sm font-semibold transition-all"
+            >
+              <span>Explore All Projects in Portfolio</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <button
-            onClick={() => {
-              if (onDiscussProject) onDiscussProject('Custom Project Discussion');
-              const target = document.querySelector('#contact');
-              if (target) target.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-600/30 transition-all"
-          >
-            Start Your Project
-          </button>
-        </div>
+        )}
+
+        {/* Project Customization Guidance Callout (on full page) */}
+        {!limit && (
+          <div className="mt-14 bg-[#0E1628] border border-slate-800 p-5 sm:p-7 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-blue-600/15 text-blue-400 shrink-0">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-sm sm:text-base font-semibold text-white">Need a custom website or application developed?</h2>
+                <p className="text-xs text-slate-400">All projects are engineered with modular React code and production-ready deployments.</p>
+              </div>
+            </div>
+            <Link
+              to="/contact"
+              className="shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-600/30 transition-all"
+            >
+              Start Your Project
+            </Link>
+          </div>
+        )}
 
       </div>
 
@@ -212,7 +229,6 @@ export default function Portfolio({ onDiscussProject }) {
         <ProjectModal
           project={activeModalProject}
           onClose={() => setActiveModalProject(null)}
-          onDiscussProject={onDiscussProject}
         />
       )}
     </section>

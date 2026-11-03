@@ -1,5 +1,6 @@
 import React from 'react';
-import { Mail, MessageCircle, ArrowUp, Code2, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Mail, MessageCircle, ArrowUp, Code2 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 
@@ -9,13 +10,13 @@ export default function Footer() {
   };
 
   const navLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
-    { label: 'Services', href: '#services' },
-    { label: 'Portfolio', href: '#portfolio' },
-    { label: 'Why Me', href: '#why-me' },
-    { label: 'Process', href: '#process' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Home', path: '/' },
+    { label: 'About', path: '/about' },
+    { label: 'Services', path: '/services' },
+    { label: 'Portfolio', path: '/portfolio' },
+    { label: 'Why Me', path: '/why-work-with-me' },
+    { label: 'Process', path: '/process' },
+    { label: 'Contact', path: '/contact' },
   ];
 
   return (
@@ -27,21 +28,21 @@ export default function Footer() {
           
           {/* Brand Info */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 p-[1.5px] shadow-md shadow-blue-500/20">
+            <Link to="/" className="inline-flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 p-[1.5px] shadow-md shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-all">
                 <div className="w-full h-full bg-[#0B1120] rounded-[10px] flex items-center justify-center">
-                  <span className="text-sm font-black text-white">PS</span>
+                  <span className="text-sm font-black text-white group-hover:text-blue-400 transition-colors">PS</span>
                 </div>
               </div>
               <div>
-                <span className="font-bold text-lg text-white block">
+                <span className="font-bold text-lg text-white block group-hover:text-blue-400 transition-colors">
                   {personalInfo.name}
                 </span>
                 <span className="text-xs text-blue-400 font-mono">
                   {personalInfo.role}
                 </span>
               </div>
-            </div>
+            </Link>
 
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
               Engineering modern, responsive web experiences and custom web applications for businesses, startups, and individuals.
@@ -55,17 +56,17 @@ export default function Footer() {
           {/* Quick Navigation Links */}
           <div className="lg:col-span-4 space-y-3">
             <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
-              Navigation
+              Explore Pages
             </h4>
             <div className="grid grid-cols-2 gap-2 text-sm">
               {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
+                <Link
+                  key={link.path}
+                  to={link.path}
                   className="text-slate-400 hover:text-blue-400 transition-colors"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -121,7 +122,7 @@ export default function Footer() {
             </div>
 
             <div className="pt-2 text-xs text-slate-500">
-              Available for freelance engagements & contract roles.
+              Open for freelance projects and custom web applications.
             </div>
           </div>
 
@@ -135,12 +136,12 @@ export default function Footer() {
 
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              Crafted with <Code2 className="w-3.5 h-3.5 text-blue-400 inline" /> in React & Tailwind CSS
+              Built with <Code2 className="w-3.5 h-3.5 text-blue-400 inline" /> React 19 & Tailwind CSS
             </span>
 
             <button
               onClick={scrollToTop}
-              className="p-2 rounded-xl bg-[#0F172A] hover:bg-[#131F38] text-slate-400 hover:text-white border border-slate-800 transition-colors"
+              className="p-2 rounded-xl bg-[#0F172A] hover:bg-[#131F38] text-slate-400 hover:text-white border border-slate-800 transition-colors cursor-pointer"
               aria-label="Back to top"
               title="Back to top"
             >

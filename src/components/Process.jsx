@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { workflowSteps } from '../data/portfolioData';
 import DynamicIcon from './DynamicIcon';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
-export default function Process({ onStartProject }) {
+export default function Process({ isFullPage = false }) {
   return (
-    <section id="process" className="py-24 bg-[#080D1A] relative border-t border-slate-800/80">
+    <section className={`bg-[#080D1A] relative border-t border-slate-800/80 ${isFullPage ? 'pt-32 pb-24 md:pt-40 md:pb-28' : 'py-20'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -13,9 +14,9 @@ export default function Process({ onStartProject }) {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/30 border border-blue-700/40 text-blue-400 text-xs font-semibold tracking-wider uppercase">
             <span>Workflow & Methodology</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             How I Work: From Concept to Launch
-          </h2>
+          </h1>
           <p className="text-base sm:text-lg text-slate-300">
             A structured, 4-step process designed to eliminate confusion, keep timelines on schedule, and deliver exactly what your project requires.
           </p>
@@ -74,17 +75,13 @@ export default function Process({ onStartProject }) {
 
         {/* Process CTA Button */}
         <div className="mt-14 text-center">
-          <button
-            onClick={() => {
-              if (onStartProject) onStartProject('New Project Inquiry (Step 1 Initiation)');
-              const target = document.querySelector('#contact');
-              if (target) target.scrollIntoView({ behavior: 'smooth' });
-            }}
+          <Link
+            to="/contact"
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 transition-all"
           >
             <span>Ready to Begin? Start at Step 1</span>
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
 
       </div>
